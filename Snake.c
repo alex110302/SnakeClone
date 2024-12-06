@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "raylib.h"
+#include "raymath.h"
+#include "rcamera.h"
 
 
 /*
@@ -15,10 +17,13 @@ typedef struct SnakeSeg
     Color SnakeColor;
 } SnakeSeg;
 
+void MoveSnake(SnakeSeg* snakeSeg, int snakeIndex);
+
 int main()
 {
     InitWindow(1800, 900, "Hello, World!");
     SetTargetFPS(60);
+
 
 
     /*
@@ -48,23 +53,18 @@ int main()
         }
     };
 
+    Color myColor = { 100, 200, 10, 255 };
+   
     while (!WindowShouldClose())
     {
         BeginDrawing();
 
-        Color myColor = { 100, 200, 10, 255 };
 
         ClearBackground(myColor);
 
         DrawText("Hello World!, This is my first RayLib Project", 100, 100, 20, RED);
 
-        if (IsKeyDown(KEY_A)) snakeSeg[0].Xpos -= 13; 
-        if (IsKeyDown(KEY_W)) snakeSeg[0].Ypos -= 13; 
-        if (IsKeyDown(KEY_S)) snakeSeg[0].Ypos += 13; 
-        if (IsKeyDown(KEY_D)) snakeSeg[0].Xpos += 13; 
-
-
-        DrawRectangle(snakeSeg[0].Xpos, snakeSeg[0].Ypos, snakeSeg[0].Width, snakeSeg[0].Height, snakeSeg[0].SnakeColor);
+        MoveSnake(snakeSeg, 0);
 
         EndDrawing();
 
@@ -76,5 +76,27 @@ int main()
     return 0;
 }
 
+void MoveSnake(SnakeSeg* snakeSeg, int snakeIndex)
+{
+    double gameTime = GetTime();
+    double moveTime;
+    if (true)
+    //need to find a way to get only half a second or so to determin when to move
+    if (true)
+    
+        if (IsKeyDown(KEY_A)) snakeSeg[snakeIndex].Xpos -= 13; 
+        if (IsKeyDown(KEY_W)) snakeSeg[snakeIndex].Ypos -= 13; 
+        if (IsKeyDown(KEY_S)) snakeSeg[snakeIndex].Ypos += 13; 
+        if (IsKeyDown(KEY_D)) snakeSeg[snakeIndex].Xpos += 13; 
+
+
+    DrawRectangle(
+        snakeSeg[snakeIndex].Xpos, 
+        snakeSeg[snakeIndex].Ypos, 
+        snakeSeg[snakeIndex].Width, 
+        snakeSeg[snakeIndex].Height, 
+        snakeSeg[snakeIndex].SnakeColor
+    );
+}
 
 
