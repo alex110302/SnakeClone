@@ -1,32 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "raylib.h"
+//* IMPORTATNT you can not have the smae include that is alrady inclooded in a file..
+#include "entitylogic.c"
+
 #include "raymath.h"
 #include "rcamera.h"
 
 
-/*
-    We could do something with the position the the SnakeSeg to determin weather or not its the head or something
-*/
-typedef struct SnakeSeg
-{
-    int Width;
-    int Height;
-    int Xpos;
-    int Ypos;
-    Color SnakeColor;
-} SnakeSeg;
-
-double SecondCountDown(double startSeconds);
-
-void MoveSnake(SnakeSeg* snakeSeg, int snakeIndex);
-
 int main()
 {
+    //* Befor the game loop we will initalize game objects and things of that nautre
+
     InitWindow(1800, 900, "Snake Game");
     SetTargetFPS(60);
-
-
 
     /*
         This code will allocate memeory for 10 snake segments while also initlaizing the first snake segmanet(the head)
@@ -41,7 +27,6 @@ int main()
         return 1;
     }
 
-
     snakeSeg[0] = (SnakeSeg){
         20,
         20,
@@ -52,18 +37,21 @@ int main()
             255,
             255,
             255
-        }
+        },
+        RIGHT
     };
 
+    //* not using this right now but want to for main level background color
     Color myColor = { 100, 200, 10, 255 };
    
+   //* main game loop
     while (!WindowShouldClose())
     {
         BeginDrawing();
 
-        ClearBackground(myColor);
+        ClearBackground(DARKGRAY);
 
-        DrawText("Hello World!, This is my first RayLib Project", 100, 100, 20, RED);
+        DrawLevel(0);
 
         MoveSnake(snakeSeg, 0);
 
@@ -73,108 +61,4 @@ int main()
     }
 
     return 0;
-}
-
-void MoveSnake(SnakeSeg* snakeSeg, int snakeIndex)
-{
-    int horizontalMove;
-    int verticalMove;
-
-    if (SecondCountDown(1) > .97)
-    {   
-        
-        // if (IsKeyReleased(KEY_A)) 
-        // {
-        //     // horizontalMove -= 23;
-        //     // verticalMove += 0;
-        //     snakeSeg[snakeIndex].Xpos -= 23; 
-        //     snakeSeg[snakeIndex].Ypos += 0;
-                
-        // }
-        // else if (IsKeyReleased(KEY_W)) 
-        // {
-        //     // verticalMove -= 23;
-        //     // horizontalMove += 0;
-        //     snakeSeg[snakeIndex].Ypos -= 23; 
-        //     snakeSeg[snakeIndex].Xpos += 0;
-        // }
-        // else if (IsKeyReleased(KEY_S)) 
-        // {
-        //     // verticalMove += 23;
-        //     // horizontalMove += 0;
-        //     snakeSeg[snakeIndex].Ypos += 23; 
-        //     snakeSeg[snakeIndex].Xpos += 0;
-        // }
-        // else if (IsKeyReleased(KEY_D))
-        // {
-        //     // horizontalMove += 23;
-        //     // verticalMove += 0;
-        //     snakeSeg[snakeIndex].Xpos += 23;
-        //     snakeSeg[snakeIndex].Ypos += 0;
-        // }
-
-
-        if (IsKeyDown(KEY_A)) 
-        {
-            horizontalMove = 23;
-            verticalMove = 0;
-            // snakeSeg[snakeIndex].Xpos -= 23; 
-            // snakeSeg[snakeIndex].Ypos += 0;
-                
-        }
-        else if (IsKeyDown(KEY_W)) 
-        {
-            verticalMove = 23;
-            horizontalMove = 0;
-            // snakeSeg[snakeIndex].Ypos -= 23; 
-            // snakeSeg[snakeIndex].Xpos += 0;
-        }
-        else if (IsKeyDown(KEY_S)) 
-        {
-            verticalMove = 23;
-            horizontalMove = 0;
-            // snakeSeg[snakeIndex].Ypos += 23; 
-            // snakeSeg[snakeIndex].Xpos += 0;
-        }
-        else if (IsKeyDown(KEY_D))
-        {
-            horizontalMove = 23;
-            verticalMove = 0;
-            // snakeSeg[snakeIndex].Xpos += 23;
-            // snakeSeg[snakeIndex].Ypos += 0;
-        } 
-
-        
-
-        // snakeSeg[snakeIndex].Xpos -= horizontalMove; 
-        // snakeSeg[snakeIndex].Ypos -= verticalMove; 
-
-        // if (IsKeyReleased(KEY_A) || IsKeyReleased(KEY_W))
-        // {
-        //     snakeSeg[snakeIndex].Xpos = horizontalMove; 
-        //     snakeSeg[snakeIndex].Ypos = verticalMove; 
-        // }
-        // if (IsKeyReleased(KEY_D) || IsKeyReleased(KEY_S))
-        // {
-        //     snakeSeg[snakeIndex].Ypos = verticalMove; 
-        //     snakeSeg[snakeIndex].Xpos = horizontalMove;
-        // }
-    }
-
-
-    DrawRectangle(
-        snakeSeg[snakeIndex].Xpos, 
-        snakeSeg[snakeIndex].Ypos, 
-        snakeSeg[snakeIndex].Width, 
-        snakeSeg[snakeIndex].Height, 
-        snakeSeg[snakeIndex].SnakeColor
-    );
-}
-
-//not fully acurate because it will only update when the next frame is drawn
-double SecondCountDown(double startSeconds)
-{
-    double elaspedTime = fmod(startSeconds - GetTime(), startSeconds);
-    if (elaspedTime < 0) elaspedTime += startSeconds;
-    return elaspedTime;
 }
