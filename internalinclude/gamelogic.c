@@ -1,5 +1,5 @@
 #include <math.h>
-#include "raylib.h"
+#include "customcolors.c"
 
 //not fully acurate because it will only update when the next frame is drawn
 double SecondCountDown(double startSeconds)
@@ -8,3 +8,4 @@ double SecondCountDown(double startSeconds)
     if (elaspedTime < 0) elaspedTime += startSeconds;
     return elaspedTime;
 }
+

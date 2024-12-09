@@ -30,34 +30,52 @@ int main()
     snakeSeg[0] = (SnakeSeg){
         20,
         20,
-        500,
-        500,
-        {
-            255,
-            255,
-            255,
-            255
-        },
+        0,
+        0,
+        0,
+        0,
+        SNAKE_COLOR,
         RIGHT
     };
 
-    //* not using this right now but want to for main level background color
+    Level startLevel = levels[0]; 
+    unsigned int currentlyLoadedLevel = 0; //TODO: get ride of this var and change the code the depend on it to fit the line above this one
+
+    //* Should Get arround to impliemnting this color for my first level color
     Color myColor = { 100, 200, 10, 255 };
    
+    SnakeStartPos(snakeSeg, startLevel);
    //* main game loop
     while (!WindowShouldClose())
     {
+
         BeginDrawing();
 
-        ClearBackground(DARKGRAY);
+            //*Info Logic
+            ClearBackground(DARKGRAY);
 
-        DrawLevel(0);
+            //*level Logic
+            DrawLevel(currentlyLoadedLevel);
 
-        MoveSnake(snakeSeg, 0);
+            //*Snake Logic
+            MoveSnake(snakeSeg, 0);
+
+
+            if (SnakeOutOfBoundsKill(snakeSeg, startLevel)) 
+            {
+                if (SecondCountDown(5) > 4.5) printf("SNAKE IS OUT OF BOUNDS!!!!\n");
+                // free(snakeSeg);
+                // snakeSeg = NULL;
+            }
+            else 
+            {
+                //MoveSnake(snakeSeg, 0);
+            }
 
         EndDrawing();
 
-        if (IsKeyDown(KEY_SPACE)) CloseWindow();
+        //*Non Visual Logic
+        if (IsKeyPressed(KEY_SPACE)) CloseWindow();
     }
 
     return 0;
