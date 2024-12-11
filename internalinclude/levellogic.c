@@ -2,10 +2,7 @@
 
 typedef struct Level
 {
-    int Height;
-    int Width;
-    int DrawXpos;
-    int DrawYpos;
+    Rectangle Area;
     int StartXpos;
     int StartYpos;
     Color BackgroundColor;
@@ -15,10 +12,12 @@ typedef struct Level
 //* I am going to manually put new levels in here
 Level levels[] = {
     {
-        400,
-        400,
-        700, //TODO: wnat to make this automatic
-        250, //TODO: want to make this automatic
+        {
+            700, //TODO: wnat to make this automatic
+            250, //TODO: want to make this automatic
+            400,
+            400,
+        },
         750, //TODO: want to make this automatic
         300, //TODO: wnat to make this automatic
         {
@@ -29,10 +28,12 @@ Level levels[] = {
         }   
     },
     { //! THIS WILL NOT DRAW RIGHT!!! NEED TO SET THE DRAW X AND Y VARS CORRECTLY
-        600,
-        600,
-        0,
-        0,
+        {
+            0,
+            0,
+            600,
+            600,
+        },
         0,
         0,
         {
@@ -44,14 +45,14 @@ Level levels[] = {
     }
 };
 
-void DrawLevel(unsigned int levelIndex)
+void DrawLevel(Level level)
 {
     DrawRectangle(
-        levels[levelIndex].DrawXpos, 
-        levels[levelIndex].DrawYpos, 
-        levels[levelIndex].Width, 
-        levels[levelIndex].Height,
-        levels[levelIndex].BackgroundColor 
+        level.Area.x, 
+        level.Area.y, 
+        level.Area.width, 
+        level.Area.height,
+        level.BackgroundColor 
     );
 }
 

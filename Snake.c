@@ -28,10 +28,13 @@ int main()
     }
 
     snakeSeg[0] = (SnakeSeg){
-        20,
-        20,
-        0,
-        0,
+        true,
+        {
+            0,
+            0,
+            20,
+            20
+        },
         0,
         0,
         SNAKE_COLOR,
@@ -39,7 +42,6 @@ int main()
     };
 
     Level startLevel = levels[0]; 
-    unsigned int currentlyLoadedLevel = 0; //TODO: get ride of this var and change the code the depend on it to fit the line above this one
 
     //* Should Get arround to impliemnting this color for my first level color
     Color myColor = { 100, 200, 10, 255 };
@@ -55,21 +57,17 @@ int main()
             ClearBackground(DARKGRAY);
 
             //*level Logic
-            DrawLevel(currentlyLoadedLevel);
+            DrawLevel(startLevel);
 
             //*Snake Logic
-            MoveSnake(snakeSeg, 0);
-
-
-            if (SnakeOutOfBoundsKill(snakeSeg, startLevel)) 
+            if (snakeSeg[0].isLife == true) 
             {
-                if (SecondCountDown(5) > 4.5) printf("SNAKE IS OUT OF BOUNDS!!!!\n");
-                // free(snakeSeg);
-                // snakeSeg = NULL;
+                SnakeOutOfBoundsKill(snakeSeg, startLevel);
+                MoveSnake(snakeSeg, 0);
             }
-            else 
+            else if (snakeSeg[0].isLife == false)
             {
-                //MoveSnake(snakeSeg, 0);
+                DrawText("Game Over!", 850, 550, 24, WHITE);
             }
 
         EndDrawing();

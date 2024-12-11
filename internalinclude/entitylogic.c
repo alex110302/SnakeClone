@@ -10,10 +10,8 @@ enum EntityDirection
 
 typedef struct SnakeSeg
 {
-    int Width;
-    int Height;
-    int Xpos;
-    int Ypos;
+    bool isLife;
+    Rectangle Body;
     //?Might wanna use these last vars to determin where the next snakeseg should go
     int LastXpos;
     int LastYpos;
@@ -33,63 +31,62 @@ void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
 
         if (snakeSeg[snakeIndex].SnakeDirection == UP) 
         {
-            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Xpos;
-            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Ypos;
-            snakeSeg[snakeIndex].Xpos += 0;
-            snakeSeg[snakeIndex].Ypos -= 23; 
+            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
+            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
+            snakeSeg[snakeIndex].Body.x += 0;
+            snakeSeg[snakeIndex].Body.y -= 23; 
             snakeSeg[snakeIndex].SnakeDirection = UP;
 
         }
         else if (snakeSeg[snakeIndex].SnakeDirection == RIGHT)
         {
-            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Xpos;
-            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Ypos;
-            snakeSeg[snakeIndex].Xpos += 23;
-            snakeSeg[snakeIndex].Ypos += 0;
+            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
+            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
+            snakeSeg[snakeIndex].Body.x += 23;
+            snakeSeg[snakeIndex].Body.y += 0;
             snakeSeg[snakeIndex].SnakeDirection = RIGHT;
 
         } 
         else if (snakeSeg[snakeIndex].SnakeDirection == LEFT) 
         {
-            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Xpos;
-            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Ypos;
-            snakeSeg[snakeIndex].Xpos -= 23; 
-            snakeSeg[snakeIndex].Ypos += 0;
+            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
+            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
+            snakeSeg[snakeIndex].Body.x -= 23; 
+            snakeSeg[snakeIndex].Body.y += 0;
             snakeSeg[snakeIndex].SnakeDirection = LEFT;
                 
         }
         else if (snakeSeg[snakeIndex].SnakeDirection == DOWN) 
         {
-            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Xpos;
-            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Ypos;
-            snakeSeg[snakeIndex].Xpos += 0;
-            snakeSeg[snakeIndex].Ypos += 23; 
+            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
+            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
+            snakeSeg[snakeIndex].Body.x += 0;
+            snakeSeg[snakeIndex].Body.y += 23; 
             snakeSeg[snakeIndex].SnakeDirection = DOWN;
         }
 
-        printf("Xpos:%d Ypos:%d\n", snakeSeg[snakeIndex].Xpos, snakeSeg[snakeIndex].Ypos);
+        printf("Body.x:%f Body.y:%f\n", snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y);
     }
 
 
     DrawRectangle(
-        snakeSeg[snakeIndex].Xpos, 
-        snakeSeg[snakeIndex].Ypos, 
-        snakeSeg[snakeIndex].Width, 
-        snakeSeg[snakeIndex].Height, 
+        snakeSeg[snakeIndex].Body.x, 
+        snakeSeg[snakeIndex].Body.y, 
+        snakeSeg[snakeIndex].Body.width, 
+        snakeSeg[snakeIndex].Body.height, 
         snakeSeg[snakeIndex].SnakeColor
     );
 }
 
 void SnakeStartPos(SnakeSeg* snakeHead, Level level)
 {
-    snakeHead[0].Xpos = level.StartXpos;
-    snakeHead[0].Ypos = level.StartYpos;
+    snakeHead[0].Body.x = level.Area.x;
+    snakeHead[0].Body.y = level.Area.y;
 }
 
 bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level)
-{   
-    //! CURRENT TODO
-    //TODO: Fix this logic so it can tell what if its in our out of bounds
-    if (snakeHead[0].Xpos <= level.Height || snakeHead[0].Ypos <= level.Width ) return true;
-    return false;
+{  
+    if (CheckCollisionRecs(snakeHead[0].Body, level.Area)) return false;
+    snakeHead[0].isLife = false;
+    return true;
 }
