@@ -41,7 +41,8 @@ int main()
         RIGHT
     };
 
-    Level startLevel = levels[0]; 
+    unsigned int currnetLevel = 0;
+    Level startLevel = levels[currnetLevel]; 
 
     //* Should Get arround to impliemnting this color for my first level color
     Color myColor = { 100, 200, 10, 255 };
@@ -68,12 +69,18 @@ int main()
             else if (snakeSeg[0].isLife == false)
             {
                 DrawText("Game Over!", 850, 550, 24, WHITE);
+                if (IsKeyPressed(KEY_SPACE))
+                {
+                    snakeSeg[0].isLife = true;
+                    SnakeStartPos(snakeSeg, levels[currnetLevel]);
+                    snakeSeg[0].SnakeDirection = RIGHT;
+                } 
             }
 
         EndDrawing();
 
         //*Non Visual Logic
-        if (IsKeyPressed(KEY_SPACE)) CloseWindow();
+        if (IsKeyPressed(KEY_ESCAPE)) CloseWindow();
     }
 
     return 0;

@@ -1,5 +1,11 @@
 #include "gamelogic.c"
 
+enum RandPosXY
+{
+    RAND_X_POS,
+    RAND_Y_POS
+};        
+
 typedef struct Level
 {
     Rectangle Area;
@@ -8,6 +14,13 @@ typedef struct Level
     Color BackgroundColor;
     //? might want to add some additinal level inforamting at some point
 } Level;
+
+typedef struct Food
+{
+    Rectangle Area;
+    Color FoodColor;
+    //? May add some special properties at some point
+} Food;
 
 //* I am going to manually put new levels in here
 Level levels[] = {
@@ -56,6 +69,43 @@ void DrawLevel(Level level)
     );
 }
 
+//!this no work so itll break when we try to call the function above
+//!But I need ti impliment something like this        int random_number = (rand() % (max - min + 1)) + min;
+//this draws food at random position with the level
+/*
+void DrawFood(Level level, Color foodColor)
+{
+    Food food;
+    food.Area.x = RandPosInLevel(RAND_X_POS);
+    food.Area.y = RandPosInLevel(RAND_Y_POS);
+    food.Area.height = 20;
+    food.Area.width = 20;
+    food.FoodColor = foodColor;
+
+    DrawRectangle(
+        food.Area.x,
+        food.Area.y,
+        food.Area.width,
+        food.Area.height,
+        food.FoodColor
+    );
+}
+
+int RnadPosInLevel(enum RandPosXY randPosXY)
+{   
+    
+    switch (randPosXY)
+    {
+        case RAND_X_POS:
+           
+        return ;
+        case RAND_Y_POS:
+        
+        return ;
+    }
+    
+}
+*/
 void InitSnakeStartPosForLevl(Level level)
 {
     //level.DrawXpos = some math thing
