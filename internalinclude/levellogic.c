@@ -19,8 +19,16 @@ typedef struct Food
 {
     Rectangle Area;
     Color FoodColor;
+    bool Gotten;
     //? May add some special properties at some point
 } Food;
+
+//*Prototyps
+void DrawLevel(Level level);
+void DrawFood(Food* pFood, Level level, Color foodColor);
+int RandPosInLevel(Level level, enum RandPosXY randPosXY);
+void InitSnakeStartPosForLevl(Level level);
+
 
 //* I am going to manually put new levels in here
 Level levels[] = {
@@ -31,7 +39,7 @@ Level levels[] = {
             400,
             400,
         },
-        750, //TODO: want to make this automatic
+        760, //TODO: want to make this automatic
         300, //TODO: wnat to make this automatic
         {
             0,
@@ -58,6 +66,8 @@ Level levels[] = {
     }
 };
 
+//?level logic... need to specify because I am to lazy to move the food logic into its own thing
+//Draws the given level
 void DrawLevel(Level level)
 {
     DrawRectangle(
@@ -69,47 +79,48 @@ void DrawLevel(Level level)
     );
 }
 
-//!this no work so itll break when we try to call the function above
-//!But I need ti impliment something like this        int random_number = (rand() % (max - min + 1)) + min;
-//this draws food at random position with the level
-/*
-void DrawFood(Level level, Color foodColor)
-{
-    Food food;
-    food.Area.x = RandPosInLevel(RAND_X_POS);
-    food.Area.y = RandPosInLevel(RAND_Y_POS);
-    food.Area.height = 20;
-    food.Area.width = 20;
-    food.FoodColor = foodColor;
 
-    DrawRectangle(
-        food.Area.x,
-        food.Area.y,
-        food.Area.width,
-        food.Area.height,
-        food.FoodColor
-    );
-}
-
-int RnadPosInLevel(enum RandPosXY randPosXY)
+int RandPosInLevel(Level level, enum RandPosXY randPosXY)
 {   
-    
     switch (randPosXY)
     {
-        case RAND_X_POS:
-           
-        return ;
-        case RAND_Y_POS:
-        
-        return ;
+        case RAND_X_POS: return GridRandMinMax(level.Area.x, level.Area.width);
+        case RAND_Y_POS: return GridRandMinMax(level.Area.y, level.Area.height);
+        default: return 0;
     }
-    
 }
-*/
+
 void InitSnakeStartPosForLevl(Level level)
 {
     //level.DrawXpos = some math thing
    //level.DrawYpos = some math thing
     //level.StartXpos = some math thing
     //level.StartYpos = some math thing
+}
+
+//?Food Logic ... should move this to another file to lazy rn
+//this draws food at random position with the level
+void DrawFood(Food *pFood, Level level, Color foodColor)
+{
+
+    if (pFood->Gotten)
+    {
+        pFood->Area.x = RandPosInLevel(level, RAND_X_POS);
+        pFood->Area.y = RandPosInLevel(level, RAND_Y_POS);
+        pFood->Gotten = false;
+    }
+
+    printf("Food-Xpos:%f Food-Ypos:%f\n",pFood->Area.x ,pFood->Area.y);
+
+    pFood->Area.height = 20;
+    pFood->Area.width = 20;
+    pFood->FoodColor = foodColor;
+
+    DrawRectangle(
+        pFood->Area.x,
+        pFood->Area.y,
+        pFood->Area.width,
+        pFood->Area.height,
+        pFood->FoodColor
+    );
 }

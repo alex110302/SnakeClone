@@ -10,7 +10,7 @@
 int main()
 {
     //* Befor the game loop we will initalize game objects and things of that nautre
-
+    //*AKA Gmae Init Logic n stuff
     InitWindow(1800, 900, "Snake Game");
     SetTargetFPS(60);
 
@@ -41,6 +41,11 @@ int main()
         RIGHT
     };
 
+    Food food = {{100,100,20,20},RED,//*dont care about the stuff getting set here besides the bool on the line bellow (thats why they are all 0 and the color does not matter either)
+        true
+    };
+    Food* pFood = &food;
+
     unsigned int currnetLevel = 0;
     Level startLevel = levels[currnetLevel]; 
 
@@ -51,14 +56,18 @@ int main()
    //* main game loop
     while (!WindowShouldClose())
     {
+        printf("%d", RandMinMax(0,10000000));
 
         BeginDrawing();
-
             //*Info Logic
             ClearBackground(DARKGRAY);
 
             //*level Logic
             DrawLevel(startLevel);
+
+            //*Food Logic
+            DrawFood(pFood, startLevel, RED);
+            CheckSnakeGrabedFood(snakeSeg, pFood);
 
             //*Snake Logic
             if (snakeSeg[0].isLife == true) 

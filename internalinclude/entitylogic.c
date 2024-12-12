@@ -19,6 +19,13 @@ typedef struct SnakeSeg
     enum EntityDirection SnakeDirection;
 } SnakeSeg;
 //? may want to move this to another file if entity file becomes to crowded (If we need to create more than one tpye of entity)
+
+//*Prototyps
+void CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood);
+void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex);
+void SnakeStartPos(SnakeSeg* snakeHead, Level level);
+bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level);
+
 void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
 {
     if (IsKeyPressed(KEY_W)) snakeSeg[snakeIndex].SnakeDirection = UP;
@@ -34,7 +41,7 @@ void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
             snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
             snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
             snakeSeg[snakeIndex].Body.x += 0;
-            snakeSeg[snakeIndex].Body.y -= 23; 
+            snakeSeg[snakeIndex].Body.y -= 20; 
             snakeSeg[snakeIndex].SnakeDirection = UP;
 
         }
@@ -42,7 +49,7 @@ void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
         {
             snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
             snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
-            snakeSeg[snakeIndex].Body.x += 23;
+            snakeSeg[snakeIndex].Body.x += 20;
             snakeSeg[snakeIndex].Body.y += 0;
             snakeSeg[snakeIndex].SnakeDirection = RIGHT;
 
@@ -51,7 +58,7 @@ void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
         {
             snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
             snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
-            snakeSeg[snakeIndex].Body.x -= 23; 
+            snakeSeg[snakeIndex].Body.x -= 20; 
             snakeSeg[snakeIndex].Body.y += 0;
             snakeSeg[snakeIndex].SnakeDirection = LEFT;
                 
@@ -61,11 +68,11 @@ void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
             snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
             snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
             snakeSeg[snakeIndex].Body.x += 0;
-            snakeSeg[snakeIndex].Body.y += 23; 
+            snakeSeg[snakeIndex].Body.y += 20; 
             snakeSeg[snakeIndex].SnakeDirection = DOWN;
         }
 
-        printf("Body.x:%f Body.y:%f\n", snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y);
+        //printf("Body.x:%f Body.y:%f\n", snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y);
     }
 
 
@@ -80,8 +87,8 @@ void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
 
 void SnakeStartPos(SnakeSeg* snakeHead, Level level)
 {
-    snakeHead[0].Body.x = level.Area.x;
-    snakeHead[0].Body.y = level.Area.y;
+    snakeHead[0].Body.x = level.StartXpos;
+    snakeHead[0].Body.y = level.StartYpos;
 }
 
 bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level)
@@ -89,4 +96,9 @@ bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level)
     if (CheckCollisionRecs(snakeHead[0].Body, level.Area)) return false;
     snakeHead[0].isLife = false;
     return true;
+}
+
+void CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood)
+{
+    if (CheckCollisionRecs(snakeHead[0].Body, pFood->Area)) pFood->Gotten = true;
 }
