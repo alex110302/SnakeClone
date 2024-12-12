@@ -21,7 +21,8 @@ typedef struct SnakeSeg
 //? may want to move this to another file if entity file becomes to crowded (If we need to create more than one tpye of entity)
 
 //*Prototyps
-void CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood);
+void AddNewSnakeSeg(SnakeSeg* snakeSeg);
+bool CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood);
 void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex);
 void SnakeStartPos(SnakeSeg* snakeHead, Level level);
 bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level);
@@ -98,7 +99,18 @@ bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level)
     return true;
 }
 
-void CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood)
+bool CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood)
 {
-    if (CheckCollisionRecs(snakeHead[0].Body, pFood->Area)) pFood->Gotten = true;
+    if (CheckCollisionRecs(snakeHead[0].Body, pFood->Area))
+    {
+        pFood->Gotten = true;
+        return true;
+    }
+
+    return false;
+}
+
+void AddNewSnakeSeg(SnakeSeg* snakeSeg)
+{
+    printf("Not Implimented Yet");
 }

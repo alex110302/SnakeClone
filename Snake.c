@@ -67,9 +67,10 @@ int main()
 
             //*Food Logic
             DrawFood(pFood, startLevel, RED);
-            CheckSnakeGrabedFood(snakeSeg, pFood);
 
             //*Snake Logic
+            if (CheckSnakeGrabedFood(snakeSeg, pFood)) AddNewSnakeSeg(snakeSeg);
+
             if (snakeSeg[0].isLife == true) 
             {
                 SnakeOutOfBoundsKill(snakeSeg, startLevel);
@@ -77,7 +78,7 @@ int main()
             }
             else if (snakeSeg[0].isLife == false)
             {
-                DrawText("Game Over!", 850, 550, 24, WHITE);
+                DrawText("Game Over!\nPress Space To Continue!", 850, 550, 24, WHITE);
                 if (IsKeyPressed(KEY_SPACE))
                 {
                     snakeSeg[0].isLife = true;

@@ -110,7 +110,7 @@ void DrawFood(Food *pFood, Level level, Color foodColor)
         pFood->Gotten = false;
     }
 
-    printf("Food-Xpos:%f Food-Ypos:%f\n",pFood->Area.x ,pFood->Area.y);
+    //printf("Food-Xpos:%f Food-Ypos:%f\n",pFood->Area.x ,pFood->Area.y);
 
     pFood->Area.height = 20;
     pFood->Area.width = 20;
