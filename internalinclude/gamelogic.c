@@ -57,7 +57,6 @@ int GridRandMinMax(int min, int max)
             else secondDigit -= 1;
         }
         tempRandNum = tempRandNum / 10;
-
         
         randNum = tempRandNum * 100 + secondDigit * 10 + firstDigit;
     }

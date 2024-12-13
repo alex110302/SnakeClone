@@ -18,7 +18,7 @@ int main()
         This code will allocate memeory for 10 snake segments while also initlaizing the first snake segmanet(the head)
     */
     int snakeInitCap = 10;
-    int currentSnakeSize = 1;
+    int* pSNakeInitCap = &snakeInitCap;
 
     SnakeSeg* snakeSeg = (SnakeSeg*)malloc(snakeInitCap * sizeof(SnakeSeg));
     if (snakeSeg == NULL) 
@@ -40,11 +40,14 @@ int main()
         SNAKE_COLOR,
         RIGHT
     };
-
-    Food food = {{100,100,20,20},RED,//*dont care about the stuff getting set here besides the bool on the line bellow (thats why they are all 0 and the color does not matter either)
+    
+    Food food = {{0,0,0,0},RED,//*dont care about the stuff getting set here besides the bool on the line bellow (thats why they are all 0 and the color does not matter either)
         true
     };
     Food* pFood = &food;
+
+    unsigned int numAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
+    unsigned int* pNumAliveSnakes = &numAliveSnakes;
 
     unsigned int currnetLevel = 0;
     Level startLevel = levels[currnetLevel]; 
@@ -56,8 +59,6 @@ int main()
    //* main game loop
     while (!WindowShouldClose())
     {
-        printf("%d", RandMinMax(0,10000000));
-
         BeginDrawing();
             //*Info Logic
             ClearBackground(DARKGRAY);
@@ -69,7 +70,9 @@ int main()
             DrawFood(pFood, startLevel, RED);
 
             //*Snake Logic
-            if (CheckSnakeGrabedFood(snakeSeg, pFood)) AddNewSnakeSeg(snakeSeg);
+            if (CheckSnakeGrabedFood(snakeSeg, pFood)) AddNewSnakeSeg(snakeSeg, pFood, pNumAliveSnakes, pSNakeInitCap);
+
+            printf("%d\n", numAliveSnakes);
 
             if (snakeSeg[0].isLife == true) 
             {

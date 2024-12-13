@@ -21,13 +21,14 @@ typedef struct SnakeSeg
 //? may want to move this to another file if entity file becomes to crowded (If we need to create more than one tpye of entity)
 
 //*Prototyps
-void AddNewSnakeSeg(SnakeSeg* snakeSeg);
+unsigned int NumOfAliveSnakeSegs(SnakeSeg* SnakeSeg);
+void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* numOfAliveSnakes, int* initNumSnakeSegs);
 bool CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood);
 void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex);
 void SnakeStartPos(SnakeSeg* snakeHead, Level level);
 bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level);
 
-void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
+void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex)
 {
     if (IsKeyPressed(KEY_W)) snakeSeg[snakeIndex].SnakeDirection = UP;
     else if (IsKeyPressed(KEY_D)) snakeSeg[snakeIndex].SnakeDirection = RIGHT;
@@ -76,7 +77,7 @@ void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex)
         //printf("Body.x:%f Body.y:%f\n", snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y);
     }
 
-
+    //!NEED TO IMPLIMENT ADDING NEW SNAKE SEG TO SCREEN
     DrawRectangle(
         snakeSeg[snakeIndex].Body.x, 
         snakeSeg[snakeIndex].Body.y, 
@@ -110,7 +111,33 @@ bool CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood)
     return false;
 }
 
-void AddNewSnakeSeg(SnakeSeg* snakeSeg)
+void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSnakes, int* pSNakeInitCap)
 {
-    printf("Not Implimented Yet");
+    if (CheckCollisionRecs(snakeSeg[0].Body, pFood->Area))
+    {
+        if (*pNumOfAliveSnakes + 1 > *pSNakeInitCap) return; //!we need to allocate more memory for more snkae segs
+
+        snakeSeg[*pNumOfAliveSnakes + 1] = (SnakeSeg){
+            true,
+            {
+                snakeSeg[*pNumOfAliveSnakes].LastXpos,
+                snakeSeg[*pNumOfAliveSnakes].LastYpos,
+                20,
+                20
+            },
+            0,
+            0,
+            SNAKE_COLOR,
+            snakeSeg[*pNumOfAliveSnakes].SnakeDirection
+        };
+
+        *pNumOfAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
+    }
+}
+
+unsigned int NumOfAliveSnakeSegs(SnakeSeg* snakeSeg)
+{
+    unsigned int numInitSnakeSegs = 0;
+    for(int i = 0; i <= 9; i++) if (snakeSeg[i].isLife == true) numInitSnakeSegs++;
+    return numInitSnakeSegs;
 }
