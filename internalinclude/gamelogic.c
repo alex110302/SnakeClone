@@ -63,3 +63,5 @@ int GridRandMinMax(int min, int max)
 
     return randNum;
 }
+
+//?should look into making a foreach function in the future to help make things easier

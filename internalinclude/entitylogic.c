@@ -21,12 +21,14 @@ typedef struct SnakeSeg
 //? may want to move this to another file if entity file becomes to crowded (If we need to create more than one tpye of entity)
 
 //*Prototyps
+void DrawAllSnakes(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes);
+void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex);
 unsigned int NumOfAliveSnakeSegs(SnakeSeg* SnakeSeg);
 void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* numOfAliveSnakes, int* initNumSnakeSegs);
 bool CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood);
 void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex);
 void SnakeStartPos(SnakeSeg* snakeHead, Level level);
-bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level);
+void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level);
 
 void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex)
 {
@@ -69,22 +71,19 @@ void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex)
         {
             snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
             snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
+            printf("LastXpos:%f LastYpos:%f\n", snakeSeg[snakeIndex].LastXpos, snakeSeg[snakeIndex].LastYpos);
             snakeSeg[snakeIndex].Body.x += 0;
             snakeSeg[snakeIndex].Body.y += 20; 
             snakeSeg[snakeIndex].SnakeDirection = DOWN;
         }
 
-        //printf("Body.x:%f Body.y:%f\n", snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y);
+        printf("Body.x:%f Body.y:%f\n", snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y);
+        //!The last positions are not getting set...
+        //printf("LastXpos:%f LastYpos:%f\n", snakeSeg[snakeIndex].LastXpos, snakeSeg[snakeIndex].LastYpos);
+
     }
 
-    //!NEED TO IMPLIMENT ADDING NEW SNAKE SEG TO SCREEN
-    DrawRectangle(
-        snakeSeg[snakeIndex].Body.x, 
-        snakeSeg[snakeIndex].Body.y, 
-        snakeSeg[snakeIndex].Body.width, 
-        snakeSeg[snakeIndex].Body.height, 
-        snakeSeg[snakeIndex].SnakeColor
-    );
+   DrawSnake(snakeSeg, snakeIndex);
 }
 
 void SnakeStartPos(SnakeSeg* snakeHead, Level level)
@@ -93,11 +92,10 @@ void SnakeStartPos(SnakeSeg* snakeHead, Level level)
     snakeHead[0].Body.y = level.StartYpos;
 }
 
-bool SnakeOutOfBoundsKill(SnakeSeg* snakeHead,Level level)
+void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level)
 {  
-    if (CheckCollisionRecs(snakeHead[0].Body, level.Area)) return false;
-    snakeHead[0].isLife = false;
-    return true;
+    if (CheckCollisionRecs(snakeSeg[0].Body, level.Area)) snakeSeg[0].isLife = true;
+    else snakeSeg[0].isLife = false;
 }
 
 bool CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood)
@@ -135,9 +133,28 @@ void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSn
     }
 }
 
+//?I should get around to moving the InitSnakeCap var to here in the entity logic file or something 
+//Returns the number of snake segs that exists
 unsigned int NumOfAliveSnakeSegs(SnakeSeg* snakeSeg)
 {
     unsigned int numInitSnakeSegs = 0;
-    for(int i = 0; i <= 9; i++) if (snakeSeg[i].isLife == true) numInitSnakeSegs++;
+    for (int i = 0; i <= 9; i++) if (snakeSeg[i].isLife == true) numInitSnakeSegs++;
     return numInitSnakeSegs;
+}
+
+//simply Draws A Snkae... atm put in 0 to get the snake head
+void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex)
+{
+     DrawRectangle(
+        snakeSeg[snakeIndex].Body.x, 
+        snakeSeg[snakeIndex].Body.y, 
+        snakeSeg[snakeIndex].Body.width, 
+        snakeSeg[snakeIndex].Body.height, 
+        snakeSeg[snakeIndex].SnakeColor
+    ); 
+}
+
+void DrawAllSnakes(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes)
+{
+    for (int i = 0; i <= *pNumOfAliveSnakes; i++) MoveSnake(snakeSeg, i);
 }

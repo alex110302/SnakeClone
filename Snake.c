@@ -59,6 +59,11 @@ int main()
    //* main game loop
     while (!WindowShouldClose())
     {
+        // for (int i = 0; i <= 9; i++)
+        // {
+        //     if (snakeSeg[i].isLife == true) printf("%dnd Snake X:%f Y:%f\n", i, snakeSeg[1].Body.x, snakeSeg[1].Body.y);
+        // }
+
         BeginDrawing();
             //*Info Logic
             ClearBackground(DARKGRAY);
@@ -72,12 +77,11 @@ int main()
             //*Snake Logic
             if (CheckSnakeGrabedFood(snakeSeg, pFood)) AddNewSnakeSeg(snakeSeg, pFood, pNumAliveSnakes, pSNakeInitCap);
 
-            printf("%d\n", numAliveSnakes);
-
             if (snakeSeg[0].isLife == true) 
             {
                 SnakeOutOfBoundsKill(snakeSeg, startLevel);
-                MoveSnake(snakeSeg, 0);
+                DrawAllSnakes(snakeSeg, pNumAliveSnakes);
+                //MoveSnake(snakeSeg, 0);
             }
             else if (snakeSeg[0].isLife == false)
             {
