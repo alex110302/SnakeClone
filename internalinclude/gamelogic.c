@@ -2,7 +2,7 @@
 #include <time.h>
 #include "customcolors.c"
 
-//not fully acurate because it will only update when the next frame is drawn
+//not fully acerate because it will only update when the next frame is drawn
 double SecondCountDown(double startSeconds)
 {
     double elaspedTime = fmod(startSeconds - GetTime(), startSeconds);
@@ -29,14 +29,14 @@ int RandNumber()
     return rand();
 }
 
-//?should come back and make it so you can get any random number taht is divisable by a given number ex for func singanture could be      int RandNum(int min, int max, int modNum, int divisibleBy)
+//?should come back and make it so you can get any random number that is devisable by a given number ex for func signature could be      int RandNum(int min, int max, int modNum, int divisibleBy)
 /*
     This function works like RandMinMax
     But it takes into account the game gird 
-    Which every squer is 20 by 20 in the level 
+    Which every square is 20 by 20 in the level 
     so it makes sure that the random number
     given back is a number that is evenly 
-    devisibl by 20
+    devisable by 20
 */
 int GridRandMinMax(int min, int max)
 {  
@@ -58,7 +58,7 @@ int GridRandMinMax(int min, int max)
         }
         tempRandNum = tempRandNum / 10;
         
-        randNum = tempRandNum * 100 + secondDigit * 10 + firstDigit;
+        randNum = tempRandNum * 100 + secondDigit * 10 + firstDigit; 
     }
 
     return randNum;

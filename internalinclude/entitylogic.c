@@ -12,20 +12,20 @@ typedef struct SnakeSeg
 {
     bool isLife;
     Rectangle Body;
-    //?Might wanna use these last vars to determin where the next snakeseg should go
+    //?Might wanna use these last vars to ditermin where the next snakeseg should go
     int LastXpos;
     int LastYpos;
     Color SnakeColor;
     enum EntityDirection SnakeDirection;
 } SnakeSeg;
-//? may want to move this to another file if entity file becomes to crowded (If we need to create more than one tpye of entity)
+//? may want to move this to another file if entity file becomes to crowded (If we need to create more than one type of entity)
 
-//*Prototyps
+//*prototypes
 void DrawAllSnakes(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes);
 void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex);
 unsigned int NumOfAliveSnakeSegs(SnakeSeg* SnakeSeg);
 void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* numOfAliveSnakes, int* initNumSnakeSegs);
-bool CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood);
+bool CheckSnakeGrabbedFood(SnakeSeg* snakeHead, Food* pFood);
 void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex);
 void SnakeStartPos(SnakeSeg* snakeHead, Level level);
 void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level);
@@ -98,7 +98,7 @@ void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level)
     else snakeSeg[0].isLife = false;
 }
 
-bool CheckSnakeGrabedFood(SnakeSeg* snakeHead, Food* pFood)
+bool CheckSnakeGrabbedFood(SnakeSeg* snakeHead, Food* pFood)
 {
     if (CheckCollisionRecs(snakeHead[0].Body, pFood->Area))
     {
@@ -113,7 +113,7 @@ void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSn
 {
     if (CheckCollisionRecs(snakeSeg[0].Body, pFood->Area))
     {
-        if (*pNumOfAliveSnakes + 1 > *pSNakeInitCap) return; //!we need to allocate more memory for more snkae segs
+        if (*pNumOfAliveSnakes + 1 > *pSNakeInitCap) return; //!we need to allocate more memory for more snake segs
 
         snakeSeg[*pNumOfAliveSnakes + 1] = (SnakeSeg){
             true,
@@ -142,7 +142,7 @@ unsigned int NumOfAliveSnakeSegs(SnakeSeg* snakeSeg)
     return numInitSnakeSegs;
 }
 
-//simply Draws A Snkae... atm put in 0 to get the snake head
+//simply Draws A Snake... atm put in 0 to get the snake head
 void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex)
 {
      DrawRectangle(

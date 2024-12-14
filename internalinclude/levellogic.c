@@ -12,7 +12,7 @@ typedef struct Level
     int StartXpos;
     int StartYpos;
     Color BackgroundColor;
-    //? might want to add some additinal level inforamting at some point
+    //? might want to add some additional level information at some point
 } Level;
 
 typedef struct Food
@@ -23,24 +23,24 @@ typedef struct Food
     //? May add some special properties at some point
 } Food;
 
-//*Prototyps
+//*prototypes
 void DrawLevel(Level level);
 void DrawFood(Food* pFood, Level level, Color foodColor);
 int RandPosInLevel(Level level, enum RandPosXY randPosXY);
-void InitSnakeStartPosForLevl(Level level);
+void InitSnakeStartPosForLevel(Level level);
 
 
 //* I am going to manually put new levels in here
 Level levels[] = {
     {
         {
-            700, //TODO: wnat to make this automatic
+            700, //TODO: want to make this automatic
             250, //TODO: want to make this automatic
             400,
             400,
         },
         760, //TODO: want to make this automatic
-        300, //TODO: wnat to make this automatic
+        300, //TODO: want to make this automatic
         {
             0,
             252,
@@ -90,7 +90,7 @@ int RandPosInLevel(Level level, enum RandPosXY randPosXY)
     }
 }
 
-void InitSnakeStartPosForLevl(Level level)
+void InitSnakeStartPosForLevel(Level level)
 {
     //level.DrawXpos = some math thing
    //level.DrawYpos = some math thing

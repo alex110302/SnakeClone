@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-//* IMPORTATNT you can not have the smae include that is alrady inclooded in a file..
+//* Important you can not have the same include that is already included in a file..
 #include "entitylogic.c"
 
 #include "raymath.h"
@@ -9,13 +9,13 @@
 
 int main()
 {
-    //* Befor the game loop we will initalize game objects and things of that nautre
-    //*AKA Gmae Init Logic n stuff
+    //* Befor the game loop we will initialize game objects and things of that nature
+    //*AKA Game Init Logic n stuff
     InitWindow(1800, 900, "Snake Game");
     SetTargetFPS(60);
 
     /*
-        This code will allocate memeory for 10 snake segments while also initlaizing the first snake segmanet(the head)
+        This code will allocate memory for 10 snake segments while also initializing the first snake segment(the head)
     */
     int snakeInitCap = 10;
     int* pSNakeInitCap = &snakeInitCap;
@@ -49,10 +49,10 @@ int main()
     unsigned int numAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
     unsigned int* pNumAliveSnakes = &numAliveSnakes;
 
-    unsigned int currnetLevel = 0;
-    Level startLevel = levels[currnetLevel]; 
+    unsigned int currentLevel = 0;
+    Level startLevel = levels[currentLevel]; 
 
-    //* Should Get arround to impliemnting this color for my first level color
+    //* Should Get around to implementing this color for my first level color
     Color myColor = { 100, 200, 10, 255 };
    
     SnakeStartPos(snakeSeg, startLevel);
@@ -75,7 +75,7 @@ int main()
             DrawFood(pFood, startLevel, RED);
 
             //*Snake Logic
-            if (CheckSnakeGrabedFood(snakeSeg, pFood)) AddNewSnakeSeg(snakeSeg, pFood, pNumAliveSnakes, pSNakeInitCap);
+            if (CheckSnakeGrabbedFood(snakeSeg, pFood)) AddNewSnakeSeg(snakeSeg, pFood, pNumAliveSnakes, pSNakeInitCap);
 
             if (snakeSeg[0].isLife == true) 
             {
@@ -89,7 +89,7 @@ int main()
                 if (IsKeyPressed(KEY_SPACE))
                 {
                     snakeSeg[0].isLife = true;
-                    SnakeStartPos(snakeSeg, levels[currnetLevel]);
+                    SnakeStartPos(snakeSeg, levels[currentLevel]);
                     snakeSeg[0].SnakeDirection = RIGHT;
                 } 
             }
