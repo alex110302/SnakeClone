@@ -29,6 +29,7 @@ int main()
 
     snakeSeg[0] = (SnakeSeg){
         true,
+        true,
         {
             0,
             0,
@@ -53,7 +54,7 @@ int main()
     Level startLevel = levels[currentLevel]; 
 
     //* Should Get around to implementing this color for my first level color
-    Color myColor = { 100, 200, 10, 255 };
+    //Color myColor = { 100, 200, 10, 255 };
    
     SnakeStartPos(snakeSeg, startLevel);
    //* main game loop
@@ -81,7 +82,6 @@ int main()
             {
                 SnakeOutOfBoundsKill(snakeSeg, startLevel);
                 DrawAllSnakes(snakeSeg, pNumAliveSnakes);
-                //MoveSnake(snakeSeg, 0);
             }
             else if (snakeSeg[0].isLife == false)
             {
@@ -93,6 +93,7 @@ int main()
                     snakeSeg[0].SnakeDirection = RIGHT;
                 } 
             }
+            //printf("%d\n", *pNumAliveSnakes);
 
         EndDrawing();
 

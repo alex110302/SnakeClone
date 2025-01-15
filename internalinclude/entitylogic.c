@@ -10,77 +10,76 @@ enum EntityDirection
 
 typedef struct SnakeSeg
 {
+    bool isHead;
     bool isLife;
     Rectangle Body;
     //?Might wanna use these last vars to ditermin where the next snakeseg should go
-    int LastXpos;
-    int LastYpos;
+    double LastXpos;
+    double LastYpos;
     Color SnakeColor;
     enum EntityDirection SnakeDirection;
 } SnakeSeg;
 //? may want to move this to another file if entity file becomes to crowded (If we need to create more than one type of entity)
 
 //*prototypes
+void MoveSnakeSegs(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes);
 void DrawAllSnakes(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes);
 void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex);
 unsigned int NumOfAliveSnakeSegs(SnakeSeg* SnakeSeg);
 void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* numOfAliveSnakes, int* initNumSnakeSegs);
 bool CheckSnakeGrabbedFood(SnakeSeg* snakeHead, Food* pFood);
-void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex);
+void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex, unsigned int* pNumOfAliveSnakes);
 void SnakeStartPos(SnakeSeg* snakeHead, Level level);
 void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level);
 
-void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex)
+void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex, unsigned int* pNumOfAliveSnakes)
 {
-    if (IsKeyPressed(KEY_W)) snakeSeg[snakeIndex].SnakeDirection = UP;
-    else if (IsKeyPressed(KEY_D)) snakeSeg[snakeIndex].SnakeDirection = RIGHT;
-    else if (IsKeyPressed(KEY_S)) snakeSeg[snakeIndex].SnakeDirection = DOWN;
-    else if (IsKeyPressed(KEY_A)) snakeSeg[snakeIndex].SnakeDirection = LEFT;
+    if (IsKeyPressed(KEY_W)) snakeSeg[0].SnakeDirection = UP;
+    else if (IsKeyPressed(KEY_D)) snakeSeg[0].SnakeDirection = RIGHT;
+    else if (IsKeyPressed(KEY_S)) snakeSeg[0].SnakeDirection = DOWN;
+    else if (IsKeyPressed(KEY_A)) snakeSeg[0].SnakeDirection = LEFT;
 
     if (SecondCountDown(1) > .99)
     {   
-
-        if (snakeSeg[snakeIndex].SnakeDirection == UP) 
+        if (snakeSeg[0].SnakeDirection == UP) 
         {
-            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
-            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
-            snakeSeg[snakeIndex].Body.x += 0;
-            snakeSeg[snakeIndex].Body.y -= 20; 
-            snakeSeg[snakeIndex].SnakeDirection = UP;
+            snakeSeg[0].LastXpos = snakeSeg[0].Body.x;
+            snakeSeg[0].LastYpos = snakeSeg[0].Body.y;
+            snakeSeg[0].Body.x += 0;
+            snakeSeg[0].Body.y -= 20; 
+            snakeSeg[0].SnakeDirection = UP;
 
         }
-        else if (snakeSeg[snakeIndex].SnakeDirection == RIGHT)
+        else if (snakeSeg[0].SnakeDirection == RIGHT)
         {
-            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
-            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
-            snakeSeg[snakeIndex].Body.x += 20;
-            snakeSeg[snakeIndex].Body.y += 0;
-            snakeSeg[snakeIndex].SnakeDirection = RIGHT;
+            snakeSeg[0].LastXpos = snakeSeg[0].Body.x;
+            snakeSeg[0].LastYpos = snakeSeg[0].Body.y;
+            snakeSeg[0].Body.x += 20;
+            snakeSeg[0].Body.y += 0;
+            snakeSeg[0].SnakeDirection = RIGHT;
 
         } 
-        else if (snakeSeg[snakeIndex].SnakeDirection == LEFT) 
+        else if (snakeSeg[0].SnakeDirection == LEFT) 
         {
-            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
-            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
-            snakeSeg[snakeIndex].Body.x -= 20; 
-            snakeSeg[snakeIndex].Body.y += 0;
+            snakeSeg[0].LastXpos = snakeSeg[0].Body.x;
+            snakeSeg[0].LastYpos = snakeSeg[0].Body.y;
+            snakeSeg[0].Body.x -= 20; 
+            snakeSeg[0].Body.y += 0;
             snakeSeg[snakeIndex].SnakeDirection = LEFT;
                 
         }
-        else if (snakeSeg[snakeIndex].SnakeDirection == DOWN) 
+        else if (snakeSeg[0].SnakeDirection == DOWN) 
         {
-            snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
-            snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;
-            printf("LastXpos:%f LastYpos:%f\n", snakeSeg[snakeIndex].LastXpos, snakeSeg[snakeIndex].LastYpos);
-            snakeSeg[snakeIndex].Body.x += 0;
-            snakeSeg[snakeIndex].Body.y += 20; 
-            snakeSeg[snakeIndex].SnakeDirection = DOWN;
+            snakeSeg[0].LastXpos = snakeSeg[0].Body.x;
+            snakeSeg[0].LastYpos = snakeSeg[snakeIndex].Body.y;
+            snakeSeg[0].Body.x += 0;
+            snakeSeg[0].Body.y += 20; 
+            snakeSeg[0].SnakeDirection = DOWN;
         }
 
-        printf("Body.x:%f Body.y:%f\n", snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y);
-        //!The last positions are not getting set...
-        //printf("LastXpos:%f LastYpos:%f\n", snakeSeg[snakeIndex].LastXpos, snakeSeg[snakeIndex].LastYpos);
-
+        MoveSnakeSegs(snakeSeg, pNumOfAliveSnakes);
+        //printf("Body.x:%d Body.y:%d\n", snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y);
+        //printf("Snake IndexNum:%d Body.x:%f Body.y:%f LastXPos:%d LastYPos:%d\n", snakeIndex, snakeSeg[snakeIndex].Body.x, snakeSeg[snakeIndex].Body.y, snakeSeg[snakeIndex].LastXpos, snakeSeg[snakeIndex].LastYpos);
     }
 
    DrawSnake(snakeSeg, snakeIndex);
@@ -115,18 +114,19 @@ void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSn
     {
         if (*pNumOfAliveSnakes + 1 > *pSNakeInitCap) return; //!we need to allocate more memory for more snake segs
 
-        snakeSeg[*pNumOfAliveSnakes + 1] = (SnakeSeg){
+        snakeSeg[*pNumOfAliveSnakes] = (SnakeSeg){
+            false,
             true,
             {
-                snakeSeg[*pNumOfAliveSnakes].LastXpos,
-                snakeSeg[*pNumOfAliveSnakes].LastYpos,
+                snakeSeg[*pNumOfAliveSnakes - 1].LastXpos,
+                snakeSeg[*pNumOfAliveSnakes - 1].LastYpos,
                 20,
                 20
             },
             0,
             0,
             SNAKE_COLOR,
-            snakeSeg[*pNumOfAliveSnakes].SnakeDirection
+            snakeSeg[*pNumOfAliveSnakes - 1].SnakeDirection
         };
 
         *pNumOfAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
@@ -156,5 +156,26 @@ void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex)
 
 void DrawAllSnakes(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes)
 {
-    for (int i = 0; i <= *pNumOfAliveSnakes; i++) MoveSnake(snakeSeg, i);
+    for (int i = 0; i < *pNumOfAliveSnakes; i++) 
+    {
+        MoveSnake(snakeSeg, i, pNumOfAliveSnakes);
+    }
+}
+
+void MoveSnakeSegs(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes)
+{
+    printf("snake head-> SHX:%f SHLX:%f SHY:%f SHLY:%f\n", snakeSeg[0].Body.x, snakeSeg[0].LastXpos, snakeSeg[0].Body.y, snakeSeg[0].LastYpos); 
+    for (int i = 0; i < *pNumOfAliveSnakes; i++)
+    {
+        if (snakeSeg[i].isHead == false)
+        {
+            //printf("snakesegindex:%d\n", i);
+            snakeSeg[i].Body.x = snakeSeg[i - 1].LastXpos;
+            snakeSeg[i].Body.y = snakeSeg[i - 1].LastYpos;
+            snakeSeg[i].LastXpos = snakeSeg[i].Body.x;
+            snakeSeg[i].LastYpos = snakeSeg[i].Body.y;
+        }
+
+        printf("snake index:%d X:%f LX:%f Y:%f LY:%f\n", i, snakeSeg[i].Body.x, snakeSeg[i].LastXpos, snakeSeg[i].Body.y, snakeSeg[i].LastYpos);
+    }
 }
