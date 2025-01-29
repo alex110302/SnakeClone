@@ -5,7 +5,8 @@ enum EntityDirection
     UP,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    NO_DIRECTION
 };
 
 typedef struct SnakeSeg
@@ -22,6 +23,7 @@ typedef struct SnakeSeg
 //? may want to move this to another file if entity file becomes to crowded (If we need to create more than one type of entity)
 
 //*prototypes
+void InitSnake(SnakeSeg *snakeSeg, unsigned int *pSnakeInitCap);
 void MoveSnakeSegs(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes);
 void DrawAllSnakes(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes);
 void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex);
@@ -32,7 +34,30 @@ void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex, unsigned int* pNumOfA
 void SnakeStartPos(SnakeSeg* snakeHead, Level level);
 void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level);
 bool CheckIfSnakeSegInit(SnakeSeg *snakeSeg, unsigned int indexer, bool terminate);
+//!for the love of god rename this
 void TestMoveFunc(SnakeSeg *snakeSeg, unsigned int snakeIndex, enum EntityDirection snakeSegDirection);
+
+//! this is not done finsih it silly
+void InitSnake(SnakeSeg *snakeSeg, unsigned int *pSnakeInitCap)
+{
+    for (int i = 1; i != *pSnakeInitCap; i++)
+    {
+        snakeSeg[i] = (SnakeSeg){
+            false,
+            false,
+            {
+                0,
+                0,
+                20,
+                20,
+            },
+            0,
+            0,
+            SNAKE_COLOR,
+            NO_DIRECTION
+        };
+    }
+}
 
 void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex, unsigned int* pNumOfAliveSnakes)
 {
@@ -60,6 +85,8 @@ void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex, unsigned int* pNumOf
 
 void TestMoveFunc(SnakeSeg *snakeSeg, unsigned int snakeIndex, enum EntityDirection snakeSegDirection)
 {
+    printf("Number of snakes silly: %d \n", NumOfAliveSnakeSegs(snakeSeg));
+
     snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
     snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;    
 
@@ -113,7 +140,7 @@ void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSn
 {
     if (CheckCollisionRecs(snakeSeg[0].Body, pFood->Area))
     {
-        if (*pNumOfAliveSnakes + 1 > *pSNakeInitCap) return; //!we need to allocate more memory for more snake segs
+        if (*pNumOfAliveSnakes == *pSNakeInitCap) return; //!we need to allocate more memory for more snake segs
 
         snakeSeg[*pNumOfAliveSnakes] = (SnakeSeg){
             false,

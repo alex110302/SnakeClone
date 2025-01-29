@@ -49,9 +49,12 @@ int main()
 
     unsigned int numAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
     unsigned int* pNumAliveSnakes = &numAliveSnakes;
-
     unsigned int currentLevel = 0;
     Level startLevel = levels[currentLevel]; 
+
+    InitSnake(snakeSeg, pNumAliveSnakes);
+
+
 
     //* Should Get around to implementing this color for my first level color
     //Color myColor = { 100, 200, 10, 255 };
