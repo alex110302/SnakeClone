@@ -30,17 +30,17 @@ void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex);
 unsigned int NumOfAliveSnakeSegs(SnakeSeg* SnakeSeg);
 void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* numOfAliveSnakes, int* initNumSnakeSegs);
 bool CheckSnakeGrabbedFood(SnakeSeg* snakeHead, Food* pFood);
-void MoveSnake(SnakeSeg* snakeSeg,unsigned int snakeIndex, unsigned int* pNumOfAliveSnakes);
+void MoveInputHandler(SnakeSeg* snakeSeg,unsigned int snakeIndex, unsigned int* pNumOfAliveSnakes);
 void SnakeStartPos(SnakeSeg* snakeHead, Level level);
 void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level);
 bool CheckIfSnakeSegInit(SnakeSeg *snakeSeg, unsigned int indexer, bool terminate);
-//!for the love of god rename this
-void TestMoveFunc(SnakeSeg *snakeSeg, unsigned int snakeIndex, enum EntityDirection snakeSegDirection);
+void MoveSnake(SnakeSeg *snakeSeg, unsigned int snakeIndex, enum EntityDirection snakeSegDirection);
+unsigned int NumOfSnakeSegInit(SnakeSeg *snakeSeg);
 
 //! this is not done finsih it silly
 void InitSnake(SnakeSeg *snakeSeg, unsigned int *pSnakeInitCap)
 {
-    for (int i = 1; i != *pSnakeInitCap; i++)
+    for (int i = 1; i <= *pSnakeInitCap; i++)
     {
         snakeSeg[i] = (SnakeSeg){
             false,
@@ -59,20 +59,22 @@ void InitSnake(SnakeSeg *snakeSeg, unsigned int *pSnakeInitCap)
     }
 }
 
-void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex, unsigned int* pNumOfAliveSnakes)
+// Handles the inputs to move the snake
+void MoveInputHandler(SnakeSeg* snakeSeg, unsigned int snakeIndex, unsigned int* pNumOfAliveSnakes)
 {
     if (IsKeyPressed(KEY_W)) snakeSeg[0].SnakeDirection = UP;
     else if (IsKeyPressed(KEY_D)) snakeSeg[0].SnakeDirection = RIGHT;
     else if (IsKeyPressed(KEY_S)) snakeSeg[0].SnakeDirection = DOWN;
     else if (IsKeyPressed(KEY_A)) snakeSeg[0].SnakeDirection = LEFT;
+
     if (SecondCountDown(1) > .99)
     {   
         switch (snakeSeg[0].SnakeDirection)
         {
-            case UP: TestMoveFunc(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
-            case DOWN: TestMoveFunc(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
-            case LEFT: TestMoveFunc(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
-            case RIGHT: TestMoveFunc(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
+            case UP: MoveSnake(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
+            case DOWN: MoveSnake(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
+            case LEFT: MoveSnake(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
+            case RIGHT: MoveSnake(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
         }
 
         MoveSnakeSegs(snakeSeg, pNumOfAliveSnakes);
@@ -83,9 +85,10 @@ void MoveSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex, unsigned int* pNumOf
    DrawSnake(snakeSeg, snakeIndex);
 }
 
-void TestMoveFunc(SnakeSeg *snakeSeg, unsigned int snakeIndex, enum EntityDirection snakeSegDirection)
+//Moves the snake
+void MoveSnake(SnakeSeg *snakeSeg, unsigned int snakeIndex, enum EntityDirection snakeSegDirection)
 {
-    printf("Number of snakes silly: %d \n", NumOfAliveSnakeSegs(snakeSeg));
+    printf("Number of snakes silly: %d Number of snakes init: %d \n", NumOfAliveSnakeSegs(snakeSeg), NumOfSnakeSegInit(snakeSeg));
 
     snakeSeg[snakeIndex].LastXpos = snakeSeg[snakeIndex].Body.x;
     snakeSeg[snakeIndex].LastYpos = snakeSeg[snakeIndex].Body.y;    
@@ -187,7 +190,7 @@ void DrawAllSnakes(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes)
     for (int i = 0; i < *pNumOfAliveSnakes; i++) 
     {
         //! dont know what to do with this CheckIfSnakeSegInit(snakeSeg, i, true);
-        MoveSnake(snakeSeg, i, pNumOfAliveSnakes);
+        MoveInputHandler(snakeSeg, i, pNumOfAliveSnakes);
     }
 }
 
@@ -221,4 +224,11 @@ bool CheckIfSnakeSegInit(SnakeSeg *snakeSeg, unsigned int indexer, bool terminat
         exit(0);
     }
     return false; 
+}
+
+unsigned int NumOfSnakeSegInit(SnakeSeg *snakeSeg)
+{
+    unsigned int numInitSnakeSegs = 0;
+    for (int i = 0; i <= 9; i++) if (snakeSeg[i].isLife == true || snakeSeg[i].isLife == false) numInitSnakeSegs++;
+    return numInitSnakeSegs;
 }
