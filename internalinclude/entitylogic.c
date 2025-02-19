@@ -40,7 +40,24 @@ unsigned int NumOfSnakeSegInit(SnakeSeg *snakeSeg);
 //! this is not done finsih it silly
 void InitSnake(SnakeSeg *snakeSeg, unsigned int *pSnakeInitCap)
 {
-    for (int i = 1; i <= *pSnakeInitCap; i++)
+    //*Snake Head is initiated 
+    snakeSeg[0] = (SnakeSeg){
+        true,
+        true,
+        {
+            0,
+            0,
+            20,
+            20
+        },
+        0,
+        0,
+        SNAKE_COLOR,
+        RIGHT
+    };
+
+    //*rest of snake is initiated
+    for (int i = 1; i < *pSnakeInitCap; i++)
     {
         snakeSeg[i] = (SnakeSeg){
             false,
@@ -66,6 +83,7 @@ void MoveInputHandler(SnakeSeg* snakeSeg, unsigned int snakeIndex, unsigned int*
     else if (IsKeyPressed(KEY_D)) snakeSeg[0].SnakeDirection = RIGHT;
     else if (IsKeyPressed(KEY_S)) snakeSeg[0].SnakeDirection = DOWN;
     else if (IsKeyPressed(KEY_A)) snakeSeg[0].SnakeDirection = LEFT;
+
 
     if (SecondCountDown(1) > .99)
     {   
@@ -145,6 +163,21 @@ void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSn
     {
         if (*pNumOfAliveSnakes == *pSNakeInitCap) return; //!we need to allocate more memory for more snake segs
 
+        // SnakeSeg newSnakeSeg = snakeSeg[*pNumOfAliveSnakes];
+        // SnakeSeg previousSnakeSeg = snakeSeg[*pNumOfAliveSnakes - 1];
+
+        // newSnakeSeg.isLife = true;
+        // *pNumOfAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
+        // newSnakeSeg.Body.x = previousSnakeSeg.LastXpos;
+        // newSnakeSeg.Body.y = previousSnakeSeg.LastXpos;
+        // newSnakeSeg.SnakeDirection = previousSnakeSeg.SnakeDirection;
+
+        // printf("snakelastposts:%f %f\n", previousSnakeSeg.LastXpos, previousSnakeSeg.LastYpos);
+
+        // snakeSeg[*pNumOfAliveSnakes] = newSnakeSeg;
+
+        //! shit broke idk why 
+
         snakeSeg[*pNumOfAliveSnakes] = (SnakeSeg){
             false,
             true,
@@ -159,8 +192,6 @@ void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSn
             SNAKE_COLOR,
             snakeSeg[*pNumOfAliveSnakes - 1].SnakeDirection
         };
-
-        *pNumOfAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
     }
 }
 

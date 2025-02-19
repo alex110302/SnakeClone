@@ -17,8 +17,8 @@ int main()
     /*
         This code will allocate memory for 10 snake segments while also initializing the first snake segment(the head)
     */
-    int snakeInitCap = 10;
-    int* pSNakeInitCap = &snakeInitCap;
+    unsigned int snakeInitCap = 10;
+    unsigned int* pSnakeInitCap = &snakeInitCap;
 
     SnakeSeg* snakeSeg = (SnakeSeg*)malloc(snakeInitCap * sizeof(SnakeSeg));
     if (snakeSeg == NULL) 
@@ -27,21 +27,8 @@ int main()
         return 1;
     }
 
-    snakeSeg[0] = (SnakeSeg){
-        true,
-        true,
-        {
-            0,
-            0,
-            20,
-            20
-        },
-        0,
-        0,
-        SNAKE_COLOR,
-        RIGHT
-    };
-    
+    InitSnake(snakeSeg, pSnakeInitCap);
+
     Food food = {{0,0,0,0},RED,//*dont care about the stuff getting set here besides the bool on the line bellow (thats why they are all 0 and the color does not matter either)
         true
     };
@@ -52,7 +39,8 @@ int main()
     unsigned int currentLevel = 0;
     Level startLevel = levels[currentLevel]; 
 
-    InitSnake(snakeSeg, pNumAliveSnakes);
+
+   
 
 
 
@@ -79,7 +67,7 @@ int main()
             DrawFood(pFood, startLevel, RED);
 
             //*Snake Logic
-            if (CheckSnakeGrabbedFood(snakeSeg, pFood)) AddNewSnakeSeg(snakeSeg, pFood, pNumAliveSnakes, pSNakeInitCap);
+            if (CheckSnakeGrabbedFood(snakeSeg, pFood)) AddNewSnakeSeg(snakeSeg, pFood, pNumAliveSnakes, pSnakeInitCap);
 
             if (snakeSeg[0].isLife == true) 
             {

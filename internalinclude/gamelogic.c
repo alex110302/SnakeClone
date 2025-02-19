@@ -2,12 +2,10 @@
 #include <time.h>
 #include "customcolors.c"
 
-//not fully acerate because it will only update when the next frame is drawn
 double SecondCountDown(double startSeconds)
 {
-    double elapsedTime = fmod(startSeconds - GetTime(), startSeconds);
-    if (elapsedTime < 0) elapsedTime += startSeconds;
-    return elapsedTime;
+    double elapsedTime = fmod(GetTime(), startSeconds);
+    return startSeconds - elapsedTime;
 }
 
 /*
