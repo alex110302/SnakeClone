@@ -72,6 +72,7 @@ int main()
             if (snakeSeg[0].isLife == true) 
             {
                 SnakeOutOfBoundsKill(snakeSeg, startLevel);
+                SnakeHeadHitSnakeSegKill(snakeSeg, pNumAliveSnakes);
                 DrawAllSnakes(snakeSeg, pNumAliveSnakes);
             }
             else if (snakeSeg[0].isLife == false)

@@ -28,7 +28,7 @@ void MoveSnakeSegs(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes);
 void DrawAllSnakes(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes);
 void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex);
 unsigned int NumOfAliveSnakeSegs(SnakeSeg* SnakeSeg);
-void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* numOfAliveSnakes, int* initNumSnakeSegs);
+void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* numOfAliveSnakes, unsigned int* initNumSnakeSegs);
 bool CheckSnakeGrabbedFood(SnakeSeg* snakeHead, Food* pFood);
 void MoveInputHandler(SnakeSeg* snakeSeg,unsigned int snakeIndex, unsigned int* pNumOfAliveSnakes);
 void SnakeStartPos(SnakeSeg* snakeHead, Level level);
@@ -36,8 +36,10 @@ void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level);
 bool CheckIfSnakeSegInit(SnakeSeg *snakeSeg, unsigned int indexer, bool terminate);
 void MoveSnake(SnakeSeg *snakeSeg, unsigned int snakeIndex, enum EntityDirection snakeSegDirection);
 unsigned int NumOfSnakeSegInit(SnakeSeg *snakeSeg);
+void SnakeHeadHitSnakeSegKill(SnakeSeg* snakeSeg, unsigned int *pNumOfAliveSnakes);
 
-//! this is not done finsih it silly
+//? may or may not want to have 2 snake segs initialized before game starts
+//initializes snake segs before the game starts or anything is drawn
 void InitSnake(SnakeSeg *snakeSeg, unsigned int *pSnakeInitCap)
 {
     //*Snake Head is initiated 
@@ -93,6 +95,7 @@ void MoveInputHandler(SnakeSeg* snakeSeg, unsigned int snakeIndex, unsigned int*
             case DOWN: MoveSnake(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
             case LEFT: MoveSnake(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
             case RIGHT: MoveSnake(snakeSeg, snakeIndex, snakeSeg[0].SnakeDirection); break;
+            case NO_DIRECTION: printf("Error when trying to move snake"); break;
         }
 
         MoveSnakeSegs(snakeSeg, pNumOfAliveSnakes);
@@ -129,6 +132,7 @@ void MoveSnake(SnakeSeg *snakeSeg, unsigned int snakeIndex, enum EntityDirection
             snakeSeg[snakeIndex].Body.x += 20;
             snakeSeg[snakeIndex].Body.y += 0; 
         break;
+        case NO_DIRECTION: printf("Error when trying to move snake"); break;
     }
     
     snakeSeg[snakeIndex].SnakeDirection = snakeSegDirection;
@@ -146,6 +150,19 @@ void SnakeOutOfBoundsKill(SnakeSeg* snakeSeg, Level level)
     else snakeSeg[0].isLife = false;
 }
 
+void SnakeHeadHitSnakeSegKill(SnakeSeg* snakeSeg, unsigned int *pNumOfAliveSnakes)
+{
+    for (int i = 1; i < *pNumOfAliveSnakes; i++) 
+    {
+        printf("in loop num:%d\n", i);
+        if (CheckCollisionRecs(snakeSeg[0].Body, snakeSeg[i].Body)) 
+        {
+            //!not sure why no worky
+            snakeSeg[0].isLife = false;
+        }
+    }
+}
+
 bool CheckSnakeGrabbedFood(SnakeSeg* snakeHead, Food* pFood)
 {
     if (CheckCollisionRecs(snakeHead[0].Body, pFood->Area))
@@ -157,41 +174,18 @@ bool CheckSnakeGrabbedFood(SnakeSeg* snakeHead, Food* pFood)
     return false;
 }
 
-void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSnakes, int* pSNakeInitCap)
+void AddNewSnakeSeg(SnakeSeg* snakeSeg, Food* pFood, unsigned int* pNumOfAliveSnakes, unsigned int* pSnakeInitCap)
 {
     if (CheckCollisionRecs(snakeSeg[0].Body, pFood->Area))
     {
-        if (*pNumOfAliveSnakes == *pSNakeInitCap) return; //!we need to allocate more memory for more snake segs
+        if (*pNumOfAliveSnakes == *pSnakeInitCap) return; //!we need to allocate more memory for more snake segs
 
-        // SnakeSeg newSnakeSeg = snakeSeg[*pNumOfAliveSnakes];
-        // SnakeSeg previousSnakeSeg = snakeSeg[*pNumOfAliveSnakes - 1];
+        snakeSeg[*pNumOfAliveSnakes].isLife = true;
+        snakeSeg[*pNumOfAliveSnakes].Body.x = snakeSeg[*pNumOfAliveSnakes - 1].LastXpos;
+        snakeSeg[*pNumOfAliveSnakes].Body.y = snakeSeg[*pNumOfAliveSnakes - 1].LastYpos;
+        snakeSeg[*pNumOfAliveSnakes].SnakeDirection = snakeSeg[*pNumOfAliveSnakes - 1].SnakeDirection;
 
-        // newSnakeSeg.isLife = true;
-        // *pNumOfAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
-        // newSnakeSeg.Body.x = previousSnakeSeg.LastXpos;
-        // newSnakeSeg.Body.y = previousSnakeSeg.LastXpos;
-        // newSnakeSeg.SnakeDirection = previousSnakeSeg.SnakeDirection;
-
-        // printf("snakelastposts:%f %f\n", previousSnakeSeg.LastXpos, previousSnakeSeg.LastYpos);
-
-        // snakeSeg[*pNumOfAliveSnakes] = newSnakeSeg;
-
-        //! shit broke idk why 
-
-        snakeSeg[*pNumOfAliveSnakes] = (SnakeSeg){
-            false,
-            true,
-            {
-                snakeSeg[*pNumOfAliveSnakes - 1].LastXpos,
-                snakeSeg[*pNumOfAliveSnakes - 1].LastYpos,
-                20,
-                20
-            },
-            0,
-            0,
-            SNAKE_COLOR,
-            snakeSeg[*pNumOfAliveSnakes - 1].SnakeDirection
-        };
+        *pNumOfAliveSnakes = NumOfAliveSnakeSegs(snakeSeg);
     }
 }
 
@@ -204,7 +198,7 @@ unsigned int NumOfAliveSnakeSegs(SnakeSeg* snakeSeg)
     return numInitSnakeSegs;
 }
 
-//simply Draws A Snake... atm put in 0 to get the snake head
+//simply Draws A Snake Segment
 void DrawSnake(SnakeSeg* snakeSeg, unsigned int snakeIndex)
 {
      DrawRectangle(
@@ -245,6 +239,7 @@ void MoveSnakeSegs(SnakeSeg* snakeSeg, unsigned int* pNumOfAliveSnakes)
     }
 }
 
+//! function does not work great or right
 bool CheckIfSnakeSegInit(SnakeSeg *snakeSeg, unsigned int indexer, bool terminate)
 {
     if (snakeSeg[indexer].isLife == true) return true;
